@@ -575,14 +575,20 @@ class TestManagerResourceOpsBase(object):
 
         # Verify successful creation
         r1 = self.create(res_command, creation_attributes)
+        if 'name' in creation_attributes:
+            creation_attributes['name'] = r1.name
         for k, v in creation_attributes.items():
             self.assertTrue(utils.is_equal(
                             v, test_aim_manager.getattr_canonical(r1, k)))
 
+        if 'name' in test_identity_attributes:
+            test_identity_attributes['name'] = r1.name
         id_attr_val = {k: v for k, v in test_identity_attributes.items()
                        if k in r1.identity_attributes}
         # Verify get
         r1 = self.get(res_command, id_attr_val)
+        if 'name' in creation_attributes:
+            creation_attributes['name'] = r1.name
         for k, v in creation_attributes.items():
             self.assertTrue(utils.is_equal(
                             v, test_aim_manager.getattr_canonical(r1, k)))

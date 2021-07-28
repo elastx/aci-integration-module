@@ -179,6 +179,8 @@ class AimManager(object):
                     context.store.from_attr(old_db_obj, type(resource),
                                             attr_val)
             db_obj = old_db_obj or context.store.make_db_obj(resource)
+            if 'name' in dir(db_obj):
+                resource.name = db_obj.name
             context.store.add(db_obj)
             if self._should_set_pending(old_db_obj, old_monitored,
                                         new_monitored):

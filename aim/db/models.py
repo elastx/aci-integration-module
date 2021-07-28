@@ -1042,6 +1042,14 @@ class SystemSecurityGroup(model_base.Base, model_base.HasAimId,
                                              'name') +
                       model_base.to_tuple(model_base.Base.__table_args__))
 
+    def from_attr(self, session, res_attr):
+        if 'name' in res_attr:
+            name = res_attr['name']
+            res_attr['name'] = name + '_SystemSecurityGroup'
+
+        # map remaining attributes to model
+        super(SystemSecurityGroup, self).from_attr(session, res_attr)
+
 
 class SystemSecurityGroupRuleRemoteIp(model_base.Base):
     __tablename__ = 'aim_system_security_group_rule_remote_ips'
@@ -1081,6 +1089,10 @@ class SystemSecurityGroupRule(model_base.Base, model_base.HasAimId,
     remote_group_id = sa.Column(sa.String(64), nullable=False)
 
     def from_attr(self, session, res_attr):
+        if 'name' in res_attr:
+            name = res_attr['name']
+            res_attr['name'] = name + '_SystemSecurityGroup'
+
         if 'remote_ips' in res_attr:
             # list of IPs has same order as DB objects
             old_ip_list = [x.cidr for x in self.remote_ips]
