@@ -814,8 +814,8 @@ class TestSystemSecurityGroup(test_aim_manager.TestSystemSecurityGroupMixin,
 
 
 class TestSystemSecurityGroupRule(
-          test_aim_manager.TestSystemSecurityGroupRuleMixin,
-          TestManagerResourceOpsBase, base.TestShell):
+        test_aim_manager.TestSystemSecurityGroupRuleMixin,
+        TestManagerResourceOpsBase, base.TestShell):
     pass
 
 
