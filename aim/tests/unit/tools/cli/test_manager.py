@@ -807,6 +807,17 @@ class TestSecurityGroupRule(test_aim_manager.TestSecurityGroupRuleMixin,
     pass
 
 
+class TestSystemSecurityGroup(test_aim_manager.TestSystemSecurityGroupMixin,
+                        TestManagerResourceOpsBase,
+                        base.TestShell):
+    pass
+
+
+class TestSystemSecurityGroupRule(test_aim_manager.TestSystemSecurityGroupRuleMixin,
+                            TestManagerResourceOpsBase, base.TestShell):
+    pass
+
+
 class TestDeviceCluster(test_aim_manager.TestDeviceClusterMixin,
                         TestManagerResourceOpsBase, base.TestShell):
     pass

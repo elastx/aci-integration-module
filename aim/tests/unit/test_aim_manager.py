@@ -1509,6 +1509,43 @@ class TestSecurityGroupRuleMixin(object):
     res_command = 'security-group-rule'
 
 
+class TestSystemSecurityGroupMixin(object):
+    resource_class = resource.SystemSecurityGroup
+    resource_root_type = resource.Tenant._aci_mo_name
+    prereq_objects = [resource.Tenant(name='tenant1')]
+    test_identity_attributes = {'tenant_name': 'tenant1', 'name': 'sys-sg1'}
+    test_required_attributes = {'tenant_name': 'tenant1', 'name': 'sys-sg1'}
+    test_search_attributes = {'display_name': 'sys-sg-display'}
+    test_update_attributes = {'display_name': 'sys-sg-display2'}
+    test_dn = 'uni/tn-tenant1/pol-sys-sg1'
+    res_command = 'system-security-group'
+
+
+class TestSystemSecurityGroupRuleMixin(object):
+    resource_class = resource.SystemSecurityGroupRule
+    resource_root_type = resource.Tenant._aci_mo_name
+    prereq_objects = [
+        resource.Tenant(name='tenant1'),
+        resource.SystemSecurityGroup(tenant_name='tenant1', name='sys-sg1')]
+    test_identity_attributes = {'tenant_name': 'tenant1',
+                                'security_group_name': 'sys-sg1',
+                                'security_group_subject_name': 'subject1',
+                                'name': 'sys-rule1'}
+    test_required_attributes = {'tenant_name': 'tenant1',
+                                'security_group_name': 'sys-sg1',
+                                'security_group_subject_name': 'subject1',
+                                'name': 'sys-rule1',
+                                'direction': 'ingress',
+                                'remote_ips': [],
+                                'remote_group_id': 'sys-rule1'}
+    test_search_attributes = {'direction': 'ingress'}
+    test_update_attributes = {'remote_ips': ['192.168.0.0/24', '10.0.0.1/30'],
+                              'from_port': '80', 'to_port': '443',
+                              'remote_group_id': ''}
+    test_dn = 'uni/tn-tenant1/pol-sys-sg1/subj-subject1/rule-sys-rule1'
+    res_command = 'system-security-group-rule'
+
+
 class TestConfigurationMixin(object):
     resource_class = resource.Configuration
     test_identity_attributes = {'key': 'apic_hosts',
@@ -2700,6 +2737,38 @@ class TestSecurityGroupRule(TestSecurityGroupRuleMixin,
         self.assertEqual(
             'igvrfnunwbqt35yheohgplxpzfilv7oyageq3qysiyiidx2rqknq',
             db_obj['metadata']['labels']['security_group_subject_name'])
+        self.assertEqual(
+            'l2yj2yf7qdftxom2xzclfhmfnp7fh75xyxryq2ggbvh77v7mjcla',
+            db_obj['metadata']['labels']['security_group_name'])
+        self.assertEqual(
+            '3lmgcuqwadvc425mfmk7dt5keazplrjrt7ygaorbjhna6ttv4ndq',
+            db_obj['metadata']['labels']['name'])
+        self.assertEqual(
+            'uwb4yv2u6k6lvjrhoi36genjxnhgkevjg24rvhuns7gzmeibpjyq',
+            db_obj['metadata']['name'])
+
+
+class TestSystemSecurityGroup(TestSystemSecurityGroupMixin,
+                               TestAciResourceOpsBase, base.TestAimDBBase):
+    pass
+
+
+class TestSystemSecurityGroupRule(TestSystemSecurityGroupRuleMixin,
+                            TestAciResourceOpsBase, base.TestAimDBBase):
+
+    @base.requires(['k8s'])
+    def test_k8s_repr(self):
+        sgr = resource.SystemSecurityGroupRule(
+            name='0_0', tenant_name='kubernetes',
+            security_group_subject_name='NetworkPolicy',
+            security_group_name='default_test-network-policy')
+        db_obj = self.ctx.store.resource_to_db_type(
+            resource.SystemSecurityGroupRule)()
+        self.ctx.store.from_attr(db_obj, resource.SystemSecurityGroupRule,
+                                 sgr.__dict__)
+        self.assertEqual(
+            's5u2ian7mxyipkk3rx632jc3zptp3ivwut4xxutricexuqn5fbia',
+            db_obj['metadata']['labels']['tenant_name'])
         self.assertEqual(
             'l2yj2yf7qdftxom2xzclfhmfnp7fh75xyxryq2ggbvh77v7mjcla',
             db_obj['metadata']['labels']['security_group_name'])

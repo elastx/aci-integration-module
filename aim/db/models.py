@@ -1096,7 +1096,7 @@ class SystemSecurityGroupRule(model_base.Base, model_base.HasAimId,
                     self.remote_ips.pop(index)
             for ip in (new_set - old_set):
                 self.remote_ips.append(
-                    SecurityGroupRuleRemoteIp(cidr=ip))
+                    SystemSecurityGroupRuleRemoteIp(cidr=ip))
             res_attr.pop('remote_ips')
 
         # map remaining attributes to model
