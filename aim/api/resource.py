@@ -1191,7 +1191,7 @@ class SystemSecurityGroup(AciResourceBase):
 
 class SystemSecurityGroupSubject(AciResourceBase):
     """Resource representing a subject within a System SG in ACI.
-    
+
     Identity attributes: name of ACI tenant, name of security group and
     name of subject.
     """

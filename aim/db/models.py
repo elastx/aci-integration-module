@@ -17,9 +17,9 @@ import sqlalchemy as sa
 from sqlalchemy.dialects.mysql import VARCHAR
 from sqlalchemy import orm
 
-from aim import exceptions as exc
 from aim.common import utils
 from aim.db import model_base
+from aim import exceptions as exc
 
 
 class Tenant(model_base.Base, model_base.HasDisplayName,
