@@ -47,6 +47,22 @@ def upgrade():
         sa.Index('idx_aim_sys_sg_identity', 'tenant_name', 'name'))
 
     op.create_table(
+        'aim_system_security_group_subjects',
+        sa.Column('aim_id', sa.String(255), nullable=False),
+        sa.Column('tenant_name', sa.String(64), nullable=False),
+        sa.Column('security_group_name', sa.String(64), nullable=False),
+        sa.Column('name', sa.String(64), nullable=False),
+        sa.Column('display_name', sa.String(256), nullable=False, default=''),
+        sa.Column('monitored', sa.Boolean, nullable=False, default=False),
+        sa.Column('epoch', sa.BigInteger(), nullable=False,
+                  server_default='0'),
+        sa.PrimaryKeyConstraint('aim_id'),
+        sa.UniqueConstraint('tenant_name', 'security_group_name', 'name',
+                            name='uniq_aim_sys_sg_subjects_identity'),
+        sa.Index('idx_aim_sys_sg_subjects_identity',
+                 'tenant_name', 'security_group_name', 'name'))
+
+    op.create_table(
         'aim_system_security_group_rules',
         sa.Column('aim_id', sa.String(255), nullable=False),
         sa.Column('name', sa.String(64), nullable=False),

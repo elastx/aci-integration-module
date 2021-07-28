@@ -1189,6 +1189,29 @@ class SystemSecurityGroup(AciResourceBase):
                                                   **kwargs)
 
 
+class SystemSecurityGroupSubject(AciResourceBase):
+    """Resource representing a subject within a System SG in ACI.
+    
+    Identity attributes: name of ACI tenant, name of security group and
+    name of subject.
+    """
+
+    identity_attributes = t.identity(
+        ('tenant_name', t.name),
+        ('security_group_name', t.name),
+        ('name', t.name))
+    other_attributes = t.other(
+        ('display_name', t.name),
+        ('monitored', t.bool))
+
+    _aci_mo_name = 'hostprotSubj'
+    _tree_parent = SystemSecurityGroup
+
+    def __init__(self, **kwargs):
+        super(SystemSecurityGroupSubject, self).__init__(
+            {'monitored': False}, **kwargs)
+
+
 class SystemSecurityGroupRule(AciResourceBase):
     """Resource representing a System SG's rule in ACI.
 
@@ -1215,7 +1238,7 @@ class SystemSecurityGroupRule(AciResourceBase):
         ('monitored', t.bool))
 
     _aci_mo_name = 'hostprotRule'
-    _tree_parent = SystemSecurityGroup
+    _tree_parent = SystemSecurityGroupSubject
 
     def __init__(self, **kwargs):
         super(SystemSecurityGroupRule, self).__init__(

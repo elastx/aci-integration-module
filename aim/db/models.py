@@ -954,8 +954,9 @@ class SecurityGroup(model_base.Base, model_base.HasAimId,
     def from_attr(self, session, res_attr):
         if 'name' in res_attr:
             if res_attr['name'].endswith('SystemSecurityGroup'):
-                raise exc.DefaultSecurityGroupNameError(klass=type(self).__name__,
-                                                        attr=res_attr['name'])
+                raise exc.DefaultSecurityGroupNameError(
+                    klass=type(self).__name__,
+                    attr=res_attr['name'])
 
         # map remaining attributes to model
         super(SecurityGroup, self).from_attr(session, res_attr)
@@ -974,6 +975,16 @@ class SecurityGroupSubject(model_base.Base, model_base.HasAimId,
         model_base.to_tuple(model_base.Base.__table_args__))
 
     security_group_name = model_base.name_column(nullable=False)
+
+    def from_attr(self, session, res_attr):
+        if 'name' in res_attr:
+            if res_attr['name'].endswith('SystemSecurityGroup'):
+                raise exc.DefaultSecurityGroupNameError(
+                    klass=type(self).__name__,
+                    attr=res_attr['name'])
+
+        # map remaining attributes to model
+        super(SecurityGroupSubject, self).from_attr(session, res_attr)
 
 
 class SecurityGroupRuleRemoteIp(model_base.Base):
@@ -1016,8 +1027,9 @@ class SecurityGroupRule(model_base.Base, model_base.HasAimId,
     def from_attr(self, session, res_attr):
         if 'name' in res_attr:
             if res_attr['name'].endswith('SystemSecurityGroup'):
-                raise exc.DefaultSecurityGroupNameError(klass=type(self).__name__,
-                                                        attr=res_attr['name'])
+                raise exc.DefaultSecurityGroupNameError(
+                    klass=type(self).__name__,
+                    attr=res_attr['name'])
 
         if 'remote_ips' in res_attr:
             # list of IPs has same order as DB objects
@@ -1066,6 +1078,31 @@ class SystemSecurityGroup(model_base.Base, model_base.HasAimId,
         super(SystemSecurityGroup, self).from_attr(session, res_attr)
 
 
+class SystemSecurityGroupSubject(model_base.Base,
+                                 model_base.HasAimId,
+                                 model_base.HasName,
+                                 model_base.HasDisplayName,
+                                 model_base.HasTenantName,
+                                 model_base.AttributeMixin,
+                                 model_base.IsMonitored):
+    """DB model SystemSecurityGroup Subject."""
+    __tablename__ = 'aim_system_security_group_subjects'
+    __table_args__ = (
+        model_base.uniq_column(__tablename__, 'tenant_name',
+                               'security_group_name', 'name') +
+        model_base.to_tuple(model_base.Base.__table_args__))
+
+    security_group_name = model_base.name_column(nullable=False)
+
+    def from_attr(self, session, res_attr):
+        if 'name' in res_attr:
+            name = res_attr['name']
+            res_attr['name'] = name + '_SystemSecurityGroup'
+
+        # map remaining attributes to model
+        super(SystemSecurityGroupSubject, self).from_attr(session, res_attr)
+
+
 class SystemSecurityGroupRuleRemoteIp(model_base.Base):
     __tablename__ = 'aim_system_security_group_rule_remote_ips'
 
@@ -1085,14 +1122,14 @@ class SystemSecurityGroupRule(model_base.Base, model_base.HasAimId,
     __table_args__ = (
         model_base.uniq_column(__tablename__, 'tenant_name',
                                'security_group_name',
-                               'name') +
+                               'security_group_subject_name', 'name') +
         model_base.to_tuple(model_base.Base.__table_args__))
     security_group_name = model_base.name_column(nullable=False)
+    security_group_subject_name = model_base.name_column(nullable=False)
     remote_ips = orm.relationship(SystemSecurityGroupRuleRemoteIp,
                                   backref='system_security_group_rule',
                                   cascade='all, delete-orphan',
                                   lazy='joined')
-    security_group_subject_name = sa.Column(sa.String(64))
     direction = sa.Column(sa.String(16))
     ethertype = sa.Column(sa.String(16))
     ip_protocol = sa.Column(sa.String(16))

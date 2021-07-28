@@ -90,6 +90,7 @@ class AimManager(object):
                      api_res.SecurityGroupSubject,
                      api_res.SecurityGroupRule,
                      api_res.SystemSecurityGroup,
+                     api_res.SystemSecurityGroupSubject,
                      api_res.SystemSecurityGroupRule,
                      api_res.Configuration,
                      api_service_graph.DeviceCluster,

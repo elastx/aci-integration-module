@@ -1525,12 +1525,33 @@ class TestSystemSecurityGroupMixin(object):
     res_command = 'system-security-group'
 
 
+class TestSystemSecurityGroupSubjectMixin(object):
+    resource_class = resource.SystemSecurityGroupSubject
+    resource_root_type = resource.Tenant._aci_mo_name
+    prereq_objects = [
+        resource.Tenant(name='tenant1'),
+        resource.SecurityGroup(tenant_name='tenant1', name='sg1')]
+    test_identity_attributes = {'tenant_name': 'tenant1',
+                                'security_group_name': 'sg1',
+                                'name': 'subject1'}
+    test_required_attributes = {'tenant_name': 'tenant1',
+                                'security_group_name': 'sg1',
+                                'name': 'subject1'}
+    test_search_attributes = {'display_name': 'sgs-display'}
+    test_update_attributes = {'display_name': 'sgs-display-2'}
+    test_dn = 'uni/tn-tenant1/pol-sg1/subj-subject1'
+    res_command = 'system-security-group-subject'
+
+
 class TestSystemSecurityGroupRuleMixin(object):
     resource_class = resource.SystemSecurityGroupRule
     resource_root_type = resource.Tenant._aci_mo_name
     prereq_objects = [
         resource.Tenant(name='tenant1'),
-        resource.SystemSecurityGroup(tenant_name='tenant1', name='sg1')]
+        resource.SystemSecurityGroup(tenant_name='tenant1', name='sg1'),
+        resource.SystemSecurityGroupSubject(tenant_name='tenant1',
+                                            security_group_name='sg1',
+                                            name='subject1')]
     test_identity_attributes = {'tenant_name': 'tenant1',
                                 'security_group_name': 'sg1',
                                 'security_group_subject_name': 'subject1',
@@ -2755,6 +2776,12 @@ class TestSecurityGroupRule(TestSecurityGroupRuleMixin,
 class TestSystemSecurityGroup(TestSystemSecurityGroupMixin,
                               TestAciResourceOpsBase,
                               base.TestAimDBBase):
+    pass
+
+
+class TestSystemSecurityGroupSubject(TestSystemSecurityGroupSubjectMixin,
+                                     TestAciResourceOpsBase,
+                                     base.TestAimDBBase):
     pass
 
 

@@ -241,6 +241,8 @@ class SqlAlchemyStore(AimStore):
                     api_res.SecurityGroupSubject: models.SecurityGroupSubject,
                     api_res.SecurityGroupRule: models.SecurityGroupRule,
                     api_res.SystemSecurityGroup: models.SystemSecurityGroup,
+                    api_res.SystemSecurityGroupSubject:
+                        models.SystemSecurityGroupSubject,
                     api_res.SystemSecurityGroupRule:
                         models.SystemSecurityGroupRule,
                     api_res.Configuration: config_model.Configuration,
