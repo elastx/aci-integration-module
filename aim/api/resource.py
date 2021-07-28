@@ -1196,10 +1196,10 @@ class SystemSecurityGroupRule(AciResourceBase):
     identity_attributes = t.identity(
         ('tenant_name', t.name),
         ('security_group_name', t.name),
+        ('security_group_subject_name', t.name),
         ('name', t.name))
     other_attributes = t.other(
         ('display_name', t.name),
-        ('security_group_subject_name', t.name),
         ('direction', t.enum("", "ingress", "egress")),
         ('ethertype', t.enum("", "undefined", "ipv4", "ipv6")),
         ('remote_ips', t.list_of_strings),
@@ -1217,8 +1217,7 @@ class SystemSecurityGroupRule(AciResourceBase):
 
     def __init__(self, **kwargs):
         super(SystemSecurityGroupRule, self).__init__(
-            {'security_group_subject_name': 'system',
-             'direction': 'ingress',
+            {'direction': 'ingress',
              'ethertype': "undefined",
              'remote_ips': [],
              'ip_protocol': self.UNSPECIFIED,
