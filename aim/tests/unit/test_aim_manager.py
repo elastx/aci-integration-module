@@ -2749,12 +2749,14 @@ class TestSecurityGroupRule(TestSecurityGroupRuleMixin,
 
 
 class TestSystemSecurityGroup(TestSystemSecurityGroupMixin,
-                               TestAciResourceOpsBase, base.TestAimDBBase):
+                              TestAciResourceOpsBase,
+                              base.TestAimDBBase):
     pass
 
 
 class TestSystemSecurityGroupRule(TestSystemSecurityGroupRuleMixin,
-                            TestAciResourceOpsBase, base.TestAimDBBase):
+                                  TestAciResourceOpsBase,
+                                  base.TestAimDBBase):
 
     @base.requires(['k8s'])
     def test_k8s_repr(self):

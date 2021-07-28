@@ -1032,9 +1032,9 @@ class SecurityGroupRule(model_base.Base, model_base.HasAimId,
 
 
 class SystemSecurityGroup(model_base.Base, model_base.HasAimId,
-                    model_base.HasName, model_base.HasDisplayName,
-                    model_base.HasTenantName, model_base.AttributeMixin,
-                    model_base.IsMonitored):
+                          model_base.HasName, model_base.HasDisplayName,
+                          model_base.HasTenantName, model_base.AttributeMixin,
+                          model_base.IsMonitored):
     """DB model for SystemSecurityGroup."""
 
     __tablename__ = 'aim_system_security_groups'
@@ -1053,10 +1053,10 @@ class SystemSecurityGroupRuleRemoteIp(model_base.Base):
 
 
 class SystemSecurityGroupRule(model_base.Base, model_base.HasAimId,
-                        model_base.HasName, model_base.HasDisplayName,
-                        model_base.HasTenantName,
-                        model_base.AttributeMixin,
-                        model_base.IsMonitored):
+                              model_base.HasName, model_base.HasDisplayName,
+                              model_base.HasTenantName,
+                              model_base.AttributeMixin,
+                              model_base.IsMonitored):
     """DB model SystemSecurityGroupRule."""
     __tablename__ = 'aim_system_security_group_rules'
     __table_args__ = (

@@ -808,13 +808,14 @@ class TestSecurityGroupRule(test_aim_manager.TestSecurityGroupRuleMixin,
 
 
 class TestSystemSecurityGroup(test_aim_manager.TestSystemSecurityGroupMixin,
-                        TestManagerResourceOpsBase,
-                        base.TestShell):
+                              TestManagerResourceOpsBase,
+                              base.TestShell):
     pass
 
 
-class TestSystemSecurityGroupRule(test_aim_manager.TestSystemSecurityGroupRuleMixin,
-                            TestManagerResourceOpsBase, base.TestShell):
+class TestSystemSecurityGroupRule(
+          test_aim_manager.TestSystemSecurityGroupRuleMixin,
+          TestManagerResourceOpsBase, base.TestShell):
     pass
 
 

@@ -1169,8 +1169,8 @@ class SecurityGroupRule(AciResourceBase):
 
 
 class SystemSecurityGroup(AciResourceBase):
-
     """Resource representing a System Security Group in ACI.
+
     Identity attributes: name of ACI tenant and name of security group
     """
 
@@ -1188,8 +1188,10 @@ class SystemSecurityGroup(AciResourceBase):
         super(SystemSecurityGroup, self).__init__({'monitored': False},
                                                   **kwargs)
 
+
 class SystemSecurityGroupRule(AciResourceBase):
     """Resource representing a System SG's rule in ACI.
+
     Identity attributes: name of ACI tenant, name of security group, name of
     subject and name of rule
     """
