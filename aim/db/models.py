@@ -17,6 +17,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects.mysql import VARCHAR
 from sqlalchemy import orm
 
+from aim import exceptions as exc
 from aim.common import utils
 from aim.db import model_base
 
@@ -950,6 +951,15 @@ class SecurityGroup(model_base.Base, model_base.HasAimId,
                                              'name') +
                       model_base.to_tuple(model_base.Base.__table_args__))
 
+    def from_attr(self, session, res_attr):
+        if 'name' in res_attr:
+            if res_attr['name'].endswith('SystemSecurityGroup'):
+                raise exc.DefaultSecurityGroupNameError(klass=type(self).__name__,
+                                                        attr=res_attr['name'])
+
+        # map remaining attributes to model
+        super(SecurityGroup, self).from_attr(session, res_attr)
+
 
 class SecurityGroupSubject(model_base.Base, model_base.HasAimId,
                            model_base.HasName, model_base.HasDisplayName,
@@ -1004,6 +1014,11 @@ class SecurityGroupRule(model_base.Base, model_base.HasAimId,
     remote_group_id = sa.Column(sa.String(64), nullable=False)
 
     def from_attr(self, session, res_attr):
+        if 'name' in res_attr:
+            if res_attr['name'].endswith('SystemSecurityGroup'):
+                raise exc.DefaultSecurityGroupNameError(klass=type(self).__name__,
+                                                        attr=res_attr['name'])
+
         if 'remote_ips' in res_attr:
             # list of IPs has same order as DB objects
             old_ip_list = [x.cidr for x in self.remote_ips]

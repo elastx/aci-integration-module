@@ -1530,13 +1530,13 @@ class TestSystemSecurityGroupRuleMixin(object):
     resource_root_type = resource.Tenant._aci_mo_name
     prereq_objects = [
         resource.Tenant(name='tenant1'),
-        resource.SystemSecurityGroup(tenant_name='tenant1', name='sg1_SystemSecurityGroup')]
+        resource.SystemSecurityGroup(tenant_name='tenant1', name='sg1')]
     test_identity_attributes = {'tenant_name': 'tenant1',
-                                'security_group_name': 'sg1_SystemSecurityGroup',
+                                'security_group_name': 'sg1',
                                 'security_group_subject_name': 'subject1',
                                 'name': 'rule1'}
     test_required_attributes = {'tenant_name': 'tenant1',
-                                'security_group_name': 'sg1_SystemSecurityGroup',
+                                'security_group_name': 'sg1',
                                 'security_group_subject_name': 'subject1',
                                 'name': 'rule1',
                                 'direction': 'ingress',
@@ -1546,7 +1546,7 @@ class TestSystemSecurityGroupRuleMixin(object):
     test_update_attributes = {'remote_ips': ['192.168.0.0/24', '10.0.0.1/30'],
                               'from_port': '80', 'to_port': '443',
                               'remote_group_id': ''}
-    test_dn = 'uni/tn-tenant1/pol-sg1_SystemSecurityGroup/subj-subject1/rule-rule1'
+    test_dn = 'uni/tn-tenant1/pol-sg1/subj-subject1/rule-rule1'
     res_command = 'system-security-group-rule'
 
 
